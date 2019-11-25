@@ -1,14 +1,10 @@
 package com.example.ReciPleaseLogin.data;
 
 
-   //     import com.google.firebase.auth.FirebaseAuth;
-  //      import com.google.firebase.auth.FirebaseUser;
-  //      import com.google.firebase.firestore.FirebaseFirestore;
-
 public class UserProfile {
 
     public String username;
-
+    public String uuid;
     public String who_are_you;
     public String cooking_experience;
     public String what_do_you_do;
@@ -19,10 +15,6 @@ public class UserProfile {
     public int num_recipes;
     public boolean over15;
     public boolean premium;
-
-  //  private FirebaseFirestore db;
-  //  private FirebaseAuth mAuth;
-   // private FirebaseUser user;
 
     //default constructor that takes no objects, required for firestore
 public UserProfile(){}
@@ -45,10 +37,10 @@ public UserProfile(){}
     }
 
 
-    // getters for firestore
     public String getUsername(){
         return username;
     }
+    public String getUuid(){return uuid;};
     public String getWho_are_you(){
         return who_are_you;
     }
@@ -58,7 +50,6 @@ public UserProfile(){}
     public String getCooking_experience() {
         return cooking_experience;
     }
-    //firebase complains about this one and crashes
     public String getSomething_interesting() {
         return something_interesting;
     }
@@ -81,22 +72,5 @@ public UserProfile(){}
         return premium;
     }
 
-    public void updateDB(){
-
-        DB.push(this);
-
-        //nolonger needed
-        /*mAuth=FirebaseAuth.getInstance();
-        user=mAuth.getInstance().getCurrentUser();
-        db = FirebaseFirestore.getInstance();
-        //db.collection(user.getUid()).add()
-        db.collection("users").document(user.getEmail()).set(this);*/
-
-    }
-
-    //fetch new data
-    public void updateView(){
-       // DB.pull(this);
-    }
 
 }

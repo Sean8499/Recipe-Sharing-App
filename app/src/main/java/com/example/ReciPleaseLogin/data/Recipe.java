@@ -5,10 +5,11 @@ import java.util.List;
 import java.util.Vector;
 
 public class Recipe {
-
-    public     String owner;
-    public     String recipe_name;
     public Date posted;
+    public     String owner;
+    public     String ownerUid;
+    public    String recipeUid;
+    public     String recipe_name;
     public List<String> ingredients;
     public List<String> instructions;
     public int num_ingredients;
@@ -32,15 +33,15 @@ public class Recipe {
     public String getOwner(){
         return owner;
     }
+    public String getOwnerUid(){
+        return ownerUid;
+    }
 
     public String getRecipe_name()
     {
         return recipe_name;
     }
-    public Date getPosted()
-    {
-        return posted;
-    }
+
     public List<String> getIngredients()
     {
     return ingredients;
@@ -74,16 +75,11 @@ return premium;
 return comments;
     }
 
-    /* local data only
-    public void updateDB(){
-        DB.push(this);
-    }
 
-    //fetch new data
-    public void updateView(){
-        DB.pull(this);
+    public Date getPosted()
+    {
+        return posted;
     }
-*/
 
 
 }

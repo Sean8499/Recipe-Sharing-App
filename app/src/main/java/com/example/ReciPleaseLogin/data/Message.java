@@ -37,18 +37,7 @@ public class Message {
 
 
 
-/* local data only
-    public void updateDB(){
 
-        DB.push(this);
-
-    }
-
-    //fetch new data
-    public void updateView(){
-        DB.pull(this);
-    }
-*/
 
 
 }

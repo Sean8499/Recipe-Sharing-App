@@ -5,40 +5,25 @@ import java.util.Vector;
 
 public class Messages {
 
-
-    List<Message> messages;
-
+    public List<Message> unread;
+    public List<Message> recieved;
+    public List<Message> sent;
 
     public Messages(){
-        messages= new Vector<Message>();
+        unread= new Vector<Message>();
+        recieved= new Vector<Message>();
+        sent= new Vector<Message>();
     }
 
-    public void post(Message message){
-
+    public List<Message> getUnread(){
+        return unread;
+    }
+    public List<Message> getRecieved(){
+        return recieved;
+    }
+    public List<Message> getSent(){
+        return sent;
     }
 
-    //not implemented
-    public void edit(Message message){
-
-    }
-
-
-    public List<Message> getMessages(){
-        return messages;
-    }
-
-
-
-
-    public void updateDB(){
-
-        DB.push(this);
-
-    }
-
-    //fetch new data
-    public void updateView(){
-        DB.pull(this);
-    }
 
 }

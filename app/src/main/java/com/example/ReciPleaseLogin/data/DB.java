@@ -1,110 +1,193 @@
+
+
 package com.example.ReciPleaseLogin.data;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
+import com.google.firebase.firestore.Query;
 
 
 public class DB {
 
-    static  private FirebaseAuth mAuth;
-    static private FirebaseUser mUser;
-    static private FirebaseFirestore db;
-    static private User user;
+    static private FirebaseAuth mAuth;
+    static public FirebaseUser mUser;
+    static private FirebaseFirestore fdb;
+    static private RUser user;
+
+
+//singleton
+    private static DB soloDB = null;
+
+    public static DB getInstance(){
+
+        if (soloDB==null)
+            soloDB=new DB();
+        return soloDB;
+    }
+
+    private DB() {
+
+     mAuth= FirebaseAuth.getInstance();
+     mUser= mAuth.getInstance().getCurrentUser();
+     fdb= FirebaseFirestore.getInstance();
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //submit any object to db
+
+
+
     static public void push( Object object){
 
         mAuth= FirebaseAuth.getInstance();
         mUser=mAuth.getInstance().getCurrentUser();
-        db = FirebaseFirestore.getInstance();
+        fdb = FirebaseFirestore.getInstance();
 
+        DocumentReference doc;
         if (object instanceof UserProfile) {
-            db.collection("users").document(mUser.getUid()).set(object);
+             fdb.collection("users").document(mUser.getUid()).set(object);
         }
         else if (object instanceof Recipe) {
             if (((Recipe) object).premium==true)
-                db.collection("PremiumRecipes").add(object);
+                doc = (fdb.collection("PremiumRecipes").add(object)).getResult();
             else if (((Recipe) object).premium==false){
-                db.collection("PublicRecipes").add(object);
+                doc = fdb.collection("PublicRecipes").add(object).getResult();
             }
         }
         else if (object instanceof Message){
-
             //send to sender and recipient
             if (((Message) object).recipeUid ==null) {
-                db.collection("users").document(mUser.getUid()).collection("messages").add(object);
+      //          ((Message) object).senderUid=mUser.getUid();
+                Query recipient= fdb.collection("users").whereArrayContains("username" ,((Message) object).recipient);
+                doc = fdb.collection("UserFeed").document(mUser.getUid()).collection("sent").add(object).getResult();
 
+                //search for user, get uid
                 //fake recipient
-                db.collection("users").document("recipient").collection("messages").add(object);
+           //     doc = db.collection("user").document(((Message) object).recipientUid).collection("inbox").add(object).getResult();
 
 
 
             }else{
                 if (((Message) object).premium==true)
-                    db.collection("PremiumRecipes").document(((Message) object).recipeUid).collection("comments").add(object);
+                   fdb.collection("PremiumRecipes").document(((Message) object).recipeUid).collection("comments").add(object);
                 else
-                    db.collection("PublicRecipes").document(((Message) object).recipeUid).collection("comments").add(object);
+                    fdb.collection("PublicRecipes").document(((Message) object).recipeUid).collection("comments").add(object);
 
             }
         }
 
+
+
+
+
+
+
+        //userprofile
+
+        //userfeed
+
+
+        //messages
+
+
+        //message
+
+        //recipes
+
+
+
+        //recipe
+
+        //user
+
+
+
+
+
     }
+
 
 
     //not sure yet
     //currently does nothing, returns object it was given;
     static public Object pull(Object object){
-
-
-        //fetch something
-
-        return object;
-    };
+      //  DocumentSnapshot doc=db.collection("users").document(mAuth.getCurrentUser().getUid()).get();
 
 
 
 
-    static public  void query(query query ){
-        String collection=query.collection;
 
-        CollectionReference ref=db.collection(collection);
+
+
+
+
+
+
+    return (Object) object;
+    }
+
+
+
+    static public  void query(Search query ){
+   //     String collection=Search.collection;
+
+        //CollectionReference ref=db.collection(collection);
 
         /*(< , <= , ==, > >=, array-contains, in, array-contains-any "*/
-        for (int i=0;i<query.num_queries;i++){
-            if (query.type.get(i)=="<") {
-                ref.whereLessThan(collection, query.searchfor.get(i));
+      /*  for (int i=0;i<Search.num_queries;i++){
+            if (Search.type.get(i)=="<") {
+                ref.whereLessThan(collection, Search.searchfor.get(i));
             }
-            else if (query.type.get(i)=="<=") {
-                ref.whereLessThanOrEqualTo(collection, query.searchfor.get(i));
+            else if (Search.type.get(i)=="<=") {
+                ref.whereLessThanOrEqualTo(collection, Search.searchfor.get(i));
             }
-            else if (query.type.get(i)=="==") {
-                ref.whereEqualTo(collection, query.searchfor.get(i));
+            else if (Search.type.get(i)=="==") {
+                ref.whereEqualTo(collection, Search.searchfor.get(i));
             }
-            else if (query.type.get(i)==">") {
-                ref.whereGreaterThan(collection, query.searchfor.get(i));
+            else if (Search.type.get(i)==">") {
+                ref.whereGreaterThan(collection, Search.searchfor.get(i));
             }
-            else if (query.type.get(i)==">=") {
-                ref.whereGreaterThanOrEqualTo(collection, query.searchfor.get(i));
+            else if (Search.type.get(i)==">=") {
+                ref.whereGreaterThanOrEqualTo(collection, Search.searchfor.get(i));
             }
-            else if (query.type.get(i)=="array-contains") {
-                ref.whereArrayContains(collection, query.searchfor.get(i));
+            else if (Search.type.get(i)=="array-contains") {
+                ref.whereArrayContains(collection, Search.searchfor.get(i));
             }
+            */
             //not found
-            //else if (query.type[i]=="in") {
-              //  ref.w(collection, query.searchfor[i]);
+            //else if (Search.type[i]=="in") {
+              //  ref.w(collection, Search.searchfor[i]);
     //        }
-  //          else if (query.type[i]=="array-contains-any") {
-//                ref.whereEqualTo(collection, query.searchfor[i]);
-      //      }
+  //          else if (Search.type[i]=="array-contains-any") {
+//                ref.whereEqualTo(collection, Search.searchfor[i]);
+           // }
         }
 
 
 
 
-    }
+
 
 
 }
