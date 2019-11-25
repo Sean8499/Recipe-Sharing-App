@@ -15,26 +15,21 @@ import android.widget.Toast;
 
 import com.example.ReciPleaseLogin.R;
 
+import com.example.ReciPleaseLogin.data.DB;
+import com.example.ReciPleaseLogin.data.RUser;
 import com.example.ReciPleaseLogin.data.UserProfile;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
+
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class Registration extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private FirebaseUser user;
+
 
     //account
     private String email, password;
@@ -45,7 +40,6 @@ public class Registration extends AppCompatActivity {
     //connection to ui
     private Button bCreateUser;
     private CheckBox age;
-    private TextView status;
     private EditText emailbox, passbox,namebox,dispbox,occbox,expbox;
 
 
@@ -60,7 +54,7 @@ public class Registration extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        bCreateUser = (Button) findViewById(R.id.register);
+        bCreateUser =  findViewById(R.id.register);
         emailbox = findViewById(R.id.rEmail);
         passbox = findViewById(R.id.rPassword);
         namebox = findViewById(R.id.rrealName);
@@ -76,11 +70,10 @@ public class Registration extends AppCompatActivity {
                     create_user();
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     if (user != null) {
-                        submit_profile(user);
+                        submit_profile();
                     }
                 }
                 else{
-                    return;
 
 
                 }
@@ -89,12 +82,7 @@ public class Registration extends AppCompatActivity {
     }
 
 
-
-
 private void create_user() {
-
-    //email
-    //password
 
     mAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -113,6 +101,7 @@ private void create_user() {
   //                      Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
                       //          Toast.LENGTH_SHORT).show();
                       //  LoginActivity.updateUI(null);
+
                     }
 
                     // ...
@@ -121,67 +110,24 @@ private void create_user() {
 }
 
 
-private void submit_profile(FirebaseUser user){
+private void submit_profile(){
     Intent intent;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-        //get user identification string for database identification
-            String uid=user.getUid();
-/*
-    Map<String, Object> profile = new HashMap<>();
+    RUser user= RUser.getInstance();
+    UserProfile profile =new UserProfile(); //initialize userprofile object
 
-    profile.put("uid",uid);
-    profile.put("name",name);
-    profile.put("dispname",dname);
-    profile.put("email",email);
-    profile.put("experience",exp);
-    profile.put("oldenough",over15);*/
+     profile.username=name;
+     profile.uuid=user.getUid();
+     profile.who_are_you=dname;
+     profile.cooking_experience=exp;
+     profile.what_do_you_do=occ;
+     profile.picture_link=null;
+     profile.over15=over15;
 
- //UserDate(String username, String realname, String cook_exp, String do_what, String something, String picture,  boolean age, boolean prem) {
-        UserProfile userdb =new UserProfile(); //initialize userdata object
+    user.db.getInstance().push(profile);
 
-     userdb.username=name;
-
-     userdb.who_are_you=dname;
-     userdb.cooking_experience=exp;
-     userdb.what_do_you_do=occ;
-     userdb.picture_link=null;
-     userdb.over15=over15;
-
-
-     userdb.updateDB();
     Toast.makeText(Registration.this, "Account Created!", Toast.LENGTH_SHORT).show();
     intent = new Intent(Registration.this, LoginActivity.class);
     startActivity(intent);
-
-    //name
-
-    //displayname
-
-
-    //occupation/what do you do
-
-    //experience
-
-/*
-// Add a new document with a generated ID
-    db.collection("users").add(profile)
-            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                @Override
-                public void onSuccess(DocumentReference documentReference) {
-                    Toast.makeText(Registration.this, "Upload Success", Toast.LENGTH_SHORT).show();
-
-                    //         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-        //            Log.w(TAG, "Error adding document", e);
-                    Toast.makeText(Registration.this, "Upload Failed", Toast.LENGTH_SHORT).show();
-                }
-            });
-*/
-
 
 }
 
