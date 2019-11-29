@@ -69,7 +69,7 @@ public class Registration extends AppCompatActivity {
                 // Do something in response to button click
                 if(validate_info()){
                     create_user();
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    user = FirebaseAuth.getInstance().getCurrentUser();
                     if (user != null) {
                         submit_profile();
                     }
@@ -129,7 +129,6 @@ private void submit_profile(){
     Toast.makeText(Registration.this, "Account Created!", Toast.LENGTH_SHORT).show();
     intent = new Intent(Registration.this, LoginActivity.class);
     startActivity(intent);
-
 }
 
 

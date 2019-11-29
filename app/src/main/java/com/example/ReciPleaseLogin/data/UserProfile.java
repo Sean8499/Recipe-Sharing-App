@@ -1,14 +1,19 @@
 package com.example.ReciPleaseLogin.data;
 
 
+import android.util.Log;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 public class UserProfile {
 
+    public String name;
     public String username;
     public String uuid;
     public String who_are_you;
     public String cooking_experience;
     public String what_do_you_do;
-    public String something_interesting; //firebase doesnt like it, complains about another getter , but none found
+    public String something_int; //firebase doesnt like it, complains about another getter , but none found
     public String picture_link;
     public int num_followers;
     public int num_likers;
@@ -25,7 +30,7 @@ public UserProfile(){}
         who_are_you = realname;
         cooking_experience = cook_exp;
         what_do_you_do = do_what;
-       something_interesting = something;
+        something_int = something;
         picture_link=picture;
         over15 = age;
         premium = prem;
@@ -50,8 +55,9 @@ public UserProfile(){}
     public String getCooking_experience() {
         return cooking_experience;
     }
-    public String getSomething_interesting() {
-        return something_interesting;
+    //firebase complains about this one and crashes
+    public String getSomething_int() {
+        return something_int;
     }
     public String getPicture_link(){
         return picture_link;
@@ -72,5 +78,29 @@ public UserProfile(){}
         return premium;
     }
 
+    public void updateDB(){
+
+        //DB.push(this);
+        DB.getInstance().pushWhoAreYou(who_are_you);
+        DB.pushUserName(username);
+        DB.pushCookingExp(cooking_experience);
+        DB.pushWhatYouDo(what_do_you_do);
+        DB.pushSomethingInteresting(something_int);
+        DB.pushNumFollowers(num_followers);
+        DB.pushAgeCheck(over15);
+
+
+        //nolonger needed
+        /*mAuth=FirebaseAuth.getInstance();
+        user=mAuth.getInstance().getCurrentUser();
+        //db.collection(user.getUid()).add()
+        db.collection("users").document(user.getEmail()).set(this);*/
+
+    }
+
+    //fetch new data
+    public void updateView(){
+       // DB.pull(this);
+    }
 
 }

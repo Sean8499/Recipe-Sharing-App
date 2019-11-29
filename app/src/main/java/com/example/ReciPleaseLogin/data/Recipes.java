@@ -48,3 +48,10 @@ public class Recipes {
 
 
 }
+        //DB.push(this);
+    }
+
+    //fetch new data
+    //public void updateView(){
+        //DB.pull(this);
+    }

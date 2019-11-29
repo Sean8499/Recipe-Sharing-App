@@ -38,7 +38,6 @@ import android.content.Context;
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    FirebaseUser user;
 
     private Button bLogin;
     private String email;
@@ -53,8 +52,7 @@ public class LoginActivity extends AppCompatActivity {
 
         FirebaseApp.initializeApp(this);
 
-
-        mAuth = FirebaseAuth.getInstance();
+        DB.getInstance();
         bLogin = (Button) findViewById(R.id.login);
         emailbox = findViewById(R.id.username);
         passbox = findViewById(R.id.Password);
@@ -70,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        mAuth.getInstance();
     }
 
     private void updateUI(FirebaseUser User) {
@@ -97,13 +95,13 @@ public class LoginActivity extends AppCompatActivity {
 
         //autocomplete generated header structure, notify listeners of auth
 
-        /*TODO:remove  this override change back to email password variables//*/
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        DB.getInstance().mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 final Context context = LoginActivity.this;
 
                 if (!task.isSuccessful()) {
+                    DB.getInstance().mAuth.getCurrentUser();
                     Toast.makeText(LoginActivity.this, "Login Failure", Toast.LENGTH_SHORT).show();
                     try {
                         throw task.getException();
@@ -132,7 +130,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 } else {
                     Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-                    user=mAuth.getCurrentUser();
 
                     UserProfile profile=new UserProfile();
 
