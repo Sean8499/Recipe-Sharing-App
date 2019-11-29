@@ -1,15 +1,19 @@
 package com.example.ReciPleaseLogin.data;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
 public class Recipe {
     public Date posted;
-    public     String owner;
-    public     String ownerUid;
-    public    String recipeUid;
-    public     String recipe_name;
+    public String owner;
+    public String ownerUid;
+
+    public String recipeUid;//generate reference uid first
+
+    public String recipe_name;
     public List<String> ingredients;
     public List<String> instructions;
     public int num_ingredients;
@@ -80,6 +84,7 @@ return comments;
     {
         return posted;
     }
+
 
 
 }

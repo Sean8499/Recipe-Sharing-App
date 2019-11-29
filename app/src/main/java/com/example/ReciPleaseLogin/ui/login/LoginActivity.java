@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.EventLog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ReciPleaseLogin.R;
+import com.example.ReciPleaseLogin.data.DB;
+import com.example.ReciPleaseLogin.data.IFaceDB;
+import com.example.ReciPleaseLogin.data.UserProfile;
 import com.example.ReciPleaseLogin.ui.Menu.MenuActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,6 +28,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.auth.User;
 
 import android.content.Context;
 
@@ -55,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Do something in response to button click
                 onLogin(view);
+
             }
         });
     }
@@ -89,6 +97,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //autocomplete generated header structure, notify listeners of auth
 
+        /*TODO:remove  this override change back to email password variables//*/
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -117,9 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         else {
                             //unhandled
-
                         }
-
 
                     }
 
@@ -127,6 +134,20 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                     user=mAuth.getCurrentUser();
 
+                    UserProfile profile=new UserProfile();
+
+                    DB.getInstance().pull(new IFaceDB()  {
+                        @Override
+                        public void onRetrievalSuccess(final Object object) {
+
+                        }
+
+                        @Override
+                        public void onRetrievalFailure() {
+
+                        }
+
+                    },profile);
                     updateUI(user);
                     //startActivity(intent);
 
@@ -142,7 +163,8 @@ public class LoginActivity extends AppCompatActivity {
     public boolean validateUser(){
         //default to true, if it makes past both conditions and is still true return true
         boolean valid =true;
-
+/*TODO:remove  this override //*/
+        /*
         email = emailbox.getText().toString();
         if(email.isEmpty()){
             emailbox.setError("Email is required");
@@ -162,7 +184,7 @@ public class LoginActivity extends AppCompatActivity {
         else {
             passbox.setError(null);
 
-        }
+        }*/
         return valid ;
     }
 }

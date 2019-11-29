@@ -63,6 +63,7 @@ public class Registration extends AppCompatActivity {
         expbox = findViewById(R.id.rExperience);
         age =findViewById(R.id.rAge);
 
+
         bCreateUser.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 // Do something in response to button click
